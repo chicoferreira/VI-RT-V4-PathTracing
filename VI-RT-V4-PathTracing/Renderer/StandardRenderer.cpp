@@ -26,7 +26,8 @@ void StandardRenderer::Render () {
 
     // main rendering loop: get primary rays from the camera until done
     for (y=0 ; y< H ; y++) {  // loop over rows
-        printf ("%d\r",y);
+        fprintf (stderr,"%d\r",y);
+        fflush (stderr);
         for (x=0 ; x< W ; x++) { // loop over columns
             RGB color(0.,0.,0.);
             

@@ -42,22 +42,23 @@ int main(int argc, const char * argv[]) {
     // Camera parameters for the simple scenes
     //const Point Eye ={0,0,0}, At={0,0,1};
     /* Cornell Box */
-    /*CornellBox(scene);
+    CornellBox(scene);
     // Camera parameters for the Cornell Box
     const Point Eye ={280,265,-500}, At={280,260,0};
     const float deFocusRad = 5.*3.14f/180.f;    // to radians
-    const float FocusDist = 800.;*/
+    const float FocusDist = 800.;
     //const Point Eye ={0,325,0}, At={560,345,350};
 
-    DeFocusTriScene (scene);
+    /*DeFocusTriScene (scene);
     float const Z=5.f;
     const Point Eye ={0.,1.0,Z}, At={0.1,1.0,Z+1.f};
     const float deFocusRad = 5.*3.14f/180.f;    // to radians
-    const float FocusDist = 5.;
+    const float FocusDist = 5.;*/
 
     const Vector Up={0,1,0};
     const float fovH = 60.f;
     const float fovHrad = fovH*3.14f/180.f;    // to radians
+    //Perspective *cam = new Perspective(Eye, At, Up, W, H, fovHrad);
     Perspective *cam = new Perspective(Eye, At, Up, W, H, fovHrad, deFocusRad, FocusDist);
 
     /*   Dummy */
@@ -70,11 +71,11 @@ int main(int argc, const char * argv[]) {
     // create the shader
     //shd = new AmbientShader(&scene, RGB(0.1,0.1,0.8));
     //shd = new WhittedShader(&scene, RGB(0.1,0.1,0.8));
-    shd = new WhittedShader(&scene, RGB(0.1,0.1,0.8));
+    shd = new DistributedShader(&scene, RGB(0.1,0.1,0.8));
     // declare the renderer
-    int const spp=10;
+    int const spp=20;
     
-    bool const jitter=false;
+    bool const jitter=true;
     StandardRenderer myRender (cam, &scene, img, shd, spp, jitter);
     // render
     start = clock();

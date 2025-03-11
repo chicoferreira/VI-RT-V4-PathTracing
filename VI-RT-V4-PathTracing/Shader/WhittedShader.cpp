@@ -8,7 +8,64 @@
 #include "WhittedShader.hpp"
 #include "BRDF.hpp"
 #include "ray.hpp"
+#include "AmbientLight.hpp"
+#include "PointLight.hpp"
 
+static RGB direct_AmbientLight (AmbientLight * l, BRDF * f) {
+    RGB color (0., 0., 0.);
+    if (!f->Ka.isZero()) {
+        RGB Ka = f->Ka;
+        color += Ka * l->L();
+    }
+    return (color);
+}
+
+static RGB direct_PointLight (PointLight* l, Scene *scene, Intersection isect, BRDF * f) {
+    RGB color (0., 0., 0.);
+
+    if (!f->Kd.isZero()) {
+        Point Lpos;
+        RGB L = l->Sample_L(NULL, &Lpos);
+        Vector Ldir=isect.p.vec2point(Lpos);
+        float Ldistance = Ldir.norm();
+        Ldir.normalize();
+        float cosL = Ldir.dot(isect.sn);
+        if (cosL>0) {
+            
+            Ray shadow = Ray(isect.p, Ldir);
+            shadow.pix_x = isect.pix_x;
+            shadow.pix_y = isect.pix_y;
+            
+            shadow.adjustOrigin(isect.gn);
+            
+            if (scene->visibility(shadow, Ldistance-EPSILON)) {
+                color += L * f->Kd * cosL;
+            }
+        }
+    } // Kd is zero
+
+    
+    return (color);
+}
+
+
+static RGB directLighting (Scene *scene, Intersection isect, BRDF *f) {
+    RGB color (0.,0.,0.);
+    
+    // Loop over scene's light sources
+    for (auto l : scene->lights) {
+
+        if (l->type == AMBIENT_LIGHT) {  // is it an ambient light ?
+            color += direct_AmbientLight ((AmbientLight *)l, f);
+            continue;
+        }
+        if (l->type == POINT_LIGHT) {  // is it a point light ?
+            color += direct_PointLight ((PointLight *)l, scene, isect, f);
+            continue;
+        } // is POINT_LIGHT
+    }  // loop over all light sources
+    return color;
+}
 
 inline Vector refract(const Vector& V, const Vector& N, double IOR) {
     auto cos_theta = std::fmin(N.dot(-1.*V), 1.0);
@@ -120,8 +177,7 @@ RGB WhittedShader::shade(bool intersected, Intersection isect, int depth) {
         color += specularTransmission (isect, f, depth+1);
     }
     
-    color += directLighting(scene, isect, f, rng, U_dist, UNIFORM_ONE);
-    //color += directLighting(scene, isect, f, rng, U_dist, ALL_LIGHTS);
+    color += directLighting(scene, isect, f);
 
     return color;
 };

@@ -19,8 +19,8 @@ private:
     Vector Up;
     float tan_halfH;
     Vector defocus_disk_Up, defocus_disk_R;
-    float defocus_angle;
     int W, H;
+    float defocus_angle;
 
     /****************************************
      
@@ -57,7 +57,6 @@ public:
         // Determine viewport dimensions.
         // precompute the tangents
         tan_halfH = tanf(_fovH/2.f);
-        fprintf (stderr, "fovH=%f, tan=%f\n", _fovH, tan_halfH);
         float viewport_height = 2.0 * tan_halfH * _focus_dist;
         //float viewport_height = 2.0 * focal_length;
         float viewport_width = viewport_height * W/H;
