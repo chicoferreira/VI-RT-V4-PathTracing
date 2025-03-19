@@ -18,7 +18,9 @@
 
  void SpheresScene (Scene& scene, int const N_spheres);
  void SpheresTriScene (Scene& scene);
- void CornellBox (Scene& scene);
+void SingleTriScene (Scene& scene);
 void DeFocusTriScene (Scene& scene);
+void CornellBox (Scene& scene);
+void DiffuseCornellBox (Scene& scene);
 
 #endif /* BuildScenes_hpp */

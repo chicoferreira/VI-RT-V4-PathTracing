@@ -14,6 +14,7 @@
 #include "AmbientShader.hpp"
 #include "WhittedShader.hpp"
 #include "DistributedShader.hpp"
+#include "IndirectDiffuseShader.hpp"
 #include "AmbientLight.hpp"
 #include "Sphere.hpp"
 #include "BuildScenes.hpp"
@@ -42,12 +43,21 @@ int main(int argc, const char * argv[]) {
     // Camera parameters for the simple scenes
     //const Point Eye ={0,0,0}, At={0,0,1};
     /* Cornell Box */
-    CornellBox(scene);
+    //CornellBox(scene);
+    DiffuseCornellBox(scene);
     // Camera parameters for the Cornell Box
     const Point Eye ={280,265,-500}, At={280,260,0};
-    const float deFocusRad = 5.*3.14f/180.f;    // to radians
+    //const float deFocusRad = 0*3.14f/180.f;    // to radians
+    //const float FocusDist = 1.;
+    const float deFocusRad = 2.5*3.14f/180.f;    // to radians
     const float FocusDist = 800.;
     //const Point Eye ={0,325,0}, At={560,345,350};
+
+    //SingleTriScene(scene);
+    /* Camera parameters for the Cornell Box*/
+    /*const Point Eye ={0,0,-5}, At={0,0,0};
+    const float deFocusRad = 0.*3.14f/180.f;    // to radians
+    const float FocusDist = 1.;*/
 
     /*DeFocusTriScene (scene);
     float const Z=5.f;
@@ -71,9 +81,10 @@ int main(int argc, const char * argv[]) {
     // create the shader
     //shd = new AmbientShader(&scene, RGB(0.1,0.1,0.8));
     //shd = new WhittedShader(&scene, RGB(0.1,0.1,0.8));
-    shd = new DistributedShader(&scene, RGB(0.1,0.1,0.8));
+    //shd = new DistributedShader(&scene, RGB(0.1,0.1,0.8));
+    shd = new IndirectDiffuse(&scene, RGB(0.,0.,0.2));
     // declare the renderer
-    int const spp=20;
+    int const spp=10;
     
     bool const jitter=true;
     StandardRenderer myRender (cam, &scene, img, shd, spp, jitter);

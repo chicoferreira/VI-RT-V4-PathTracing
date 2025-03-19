@@ -25,7 +25,9 @@ bool Scene::trace (Ray r, Intersection *isect) {
         fflush(stderr);
     }*/
         
-    
+    curr_isect.pix_x = isect->pix_x = r.pix_x;
+    curr_isect.pix_y = isect->pix_y = r.pix_y;
+
     if (numPrimitives==0) return false;
     
     // iterate over all primitives

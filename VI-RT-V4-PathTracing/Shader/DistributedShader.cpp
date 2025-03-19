@@ -9,23 +9,8 @@
 #include "BRDF.hpp"
 #include "ray.hpp"
 
+#include "Shader_Utils.hpp"
 
-inline Vector refract(const Vector& V, const Vector& N, double IOR) {
-    auto cos_theta = std::fmin(N.dot(-1.*V), 1.0);
-
-    // is there Total Internal Reflection ?
-    
-    Vector const r_out_perp =  IOR * (V + cos_theta*N);
-    Vector const r_out_parallel = -std::sqrt(std::fabs(1.0 - r_out_perp.normSQ())) * N;
-    Vector T = r_out_perp + r_out_parallel;
-    T.normalize();
-    return T;
-}
-
-inline Vector reflect(const Vector& V, const Vector& N) {
-    float cos = N.dot(V);
-    return 2.f * cos * N - V;
-}
 
 RGB DistributedShader::specularReflection (Intersection isect, BRDF *f, int depth) {
     RGB color(0.,0.,0.);
