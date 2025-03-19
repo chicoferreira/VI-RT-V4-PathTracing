@@ -21,10 +21,11 @@ typedef enum {
 
 class BRDF {
 public:
+    bool textured;
     float eta;
     RGB Ka, Kd, Ks, Kt;
 
-    BRDF () {}
+    BRDF () {textured=false;}
     ~BRDF () {}
     // return the BRDF RGB value for a pair of (incident, scattering) directions : (wi,wo)
     virtual RGB f (Vector wi, Vector wo, const BRDF_TYPES = BRDF_ALL) {return RGB();}

@@ -31,7 +31,7 @@ int main(int argc, const char * argv[]) {
     // Image resolution
     const int W= 640;
     const int H= 640;
-    
+
     img = new ImagePPM(W,H);
     
     /* Scenes*/
@@ -47,10 +47,10 @@ int main(int argc, const char * argv[]) {
     DiffuseCornellBox(scene);
     // Camera parameters for the Cornell Box
     const Point Eye ={280,265,-500}, At={280,260,0};
-    //const float deFocusRad = 0*3.14f/180.f;    // to radians
-    //const float FocusDist = 1.;
-    const float deFocusRad = 2.5*3.14f/180.f;    // to radians
-    const float FocusDist = 800.;
+    const float deFocusRad = 0*3.14f/180.f;    // to radians
+    const float FocusDist = 1.;
+    //const float deFocusRad = 2.5*3.14f/180.f;    // to radians
+    //const float FocusDist = 800.;
     //const Point Eye ={0,325,0}, At={560,345,350};
 
     //SingleTriScene(scene);
@@ -84,7 +84,7 @@ int main(int argc, const char * argv[]) {
     //shd = new DistributedShader(&scene, RGB(0.1,0.1,0.8));
     shd = new IndirectDiffuse(&scene, RGB(0.,0.,0.2));
     // declare the renderer
-    int const spp=10;
+    int const spp=1;
     
     bool const jitter=true;
     StandardRenderer myRender (cam, &scene, img, shd, spp, jitter);

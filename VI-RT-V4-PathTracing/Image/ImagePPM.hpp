@@ -17,7 +17,9 @@ class ImagePPM: public Image {
     void ToneMap ();
 public:
     ImagePPM(const int W, const int H):Image(W, H) {}
+    ImagePPM():Image() {}
     bool Save (std::string filename);
+    bool Load (std::string filename);
 };
 
 #endif /* ImagePPM_hpp */

@@ -24,7 +24,7 @@ public:
     bool isLight;  // for intersections with light sources
     RGB Le;         // for intersections with light sources
     float incident_eta;
-    
+    Vec2 TexCoord;    
     
     Intersection() {}
     // from pbrt book, section 2.10, pag 116

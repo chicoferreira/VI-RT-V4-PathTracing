@@ -15,8 +15,8 @@
 class Image {
 protected:
     RGB *imagePlane;
-    int W,H;
 public:
+    int W,H;
     Image(): W(0),H(0),imagePlane(NULL) {}
     Image(const int W, const int H): W(W),H(H) {
         imagePlane = new RGB[W*H];
@@ -24,6 +24,10 @@ public:
     }
     ~Image() {
         if (imagePlane!=NULL) delete[] imagePlane;
+    }
+    RGB get (int x, int y) {
+        if (x>W or y>H) return RGB(0.,0.,0.);
+        return imagePlane[y*W+x];
     }
     bool set (int x, int y, const RGB &rgb) {
         if (x>W or y>H) return false;
@@ -41,6 +45,7 @@ public:
         return true;
     }
     virtual bool Save (std::string filename) {return true;}
+    virtual bool Load (std::string filename) {return true;}
 };
 
 #endif /* image_hpp */

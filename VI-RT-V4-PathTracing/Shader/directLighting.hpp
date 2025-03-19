@@ -13,6 +13,7 @@
 #include "scene.hpp"
 #include <random>
 #include "shader.hpp"
+#include "DiffuseTexture.hpp"
 
 typedef  enum {
         ALL_LIGHTS,

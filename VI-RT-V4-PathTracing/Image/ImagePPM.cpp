@@ -53,3 +53,40 @@ bool ImagePPM::Save (std::string filename) {
         return  false;
     }
 }
+
+bool ImagePPM::Load (std::string filename) {
+    std::ifstream ifs;
+     ifs.open(filename, std::ios::binary);
+     // need to spec. binary mode for Windows users
+     //Image src;
+     try {
+         if (ifs.fail()) {
+             throw("Can't open input file");
+             return false;
+         }
+         std::string header;
+         int w, h, b;
+         ifs >> header;
+         if (strcmp(header.c_str(), "P6") != 0) throw("Can't read input file");
+         ifs >> w >> h >> b;
+         W = w;
+         H = h;
+         imagePlane =  new RGB[W*H];
+         ifs.ignore(256, '\n');  //skip empty lines in necessary until we get to the binary data
+         unsigned char pix[3];  //read each pixel one by one and convert bytes to floats
+         for (int i = 0; i < w * h; ++i) {
+             ifs.read(reinterpret_cast<char *>(pix), 3);
+             imagePlane[i].R = pix[0] / 255.f;
+             imagePlane[i].G = pix[1] / 255.f;
+             imagePlane[i].B = pix[2] / 255.f;
+         }
+         ifs.close();
+     }
+     catch (const char *err) {
+         fprintf(stderr, "%s\n", err);
+         ifs.close();
+         return false;
+     }
+  
+     return true;
+}

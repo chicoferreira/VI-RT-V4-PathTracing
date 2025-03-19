@@ -87,8 +87,8 @@ RGB IndirectDiffuse::shade(bool intersected, Intersection isect, int depth) {
     BRDF *f = isect.f;
     
     
-    /* // Russian Roullette
-    #define MIN_DEPTH 1
+    // Russian Roullette
+    /*#define MIN_DEPTH 1
     #define CONTINUE_PROB 0.2f
     //float continueRecurseProb =  U_dist(rng);
     //if (depth<MIN_DEPTH || continueRecurseProb<= CONTINUE_PROB) {
@@ -97,7 +97,7 @@ RGB IndirectDiffuse::shade(bool intersected, Intersection isect, int depth) {
         if (!f->Kd.isZero()) {
             color += diffuseReflection (isect, f, depth+1);
         }
-        //if (depth>= MIN_DEPTH) color /= CONTINUE_PROB;
+        if (depth>= MIN_DEPTH) color /= CONTINUE_PROB;
     }*/
     if (!f->Kd.isZero()) {
         //color += directLighting(scene, isect, f, rng, U_dist, UNIFORM_ONE);

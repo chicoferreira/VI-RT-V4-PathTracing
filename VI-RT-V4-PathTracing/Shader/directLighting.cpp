@@ -95,8 +95,17 @@ static RGB direct_AmbientLight (AmbientLight * l, BRDF * f) {
 
 static RGB direct_PointLight (PointLight* l, Scene *scene, Intersection isect, BRDF * f) {
     RGB color (0., 0., 0.);
+    RGB Kd;
+    
+    if (f->textured) {
+        DiffuseTexture * df = (DiffuseTexture *)f;
+        Kd = df->GetKd(isect.TexCoord);
+    }
+    else {
+        Kd = f->Kd;
+    }
 
-    if (!f->Kd.isZero()) {
+    if (!Kd.isZero()) {
         Point Lpos;
         RGB L = l->Sample_L(NULL, &Lpos);
         Vector Ldir=isect.p.vec2point(Lpos);
@@ -112,7 +121,7 @@ static RGB direct_PointLight (PointLight* l, Scene *scene, Intersection isect, B
             shadow.adjustOrigin(isect.gn);
             
             if (scene->visibility(shadow, Ldistance-EPSILON)) {
-                color += L * f->Kd * cosL;
+                color += L * Kd * cosL;
             }
         }
     } // Kd is zero
@@ -123,8 +132,17 @@ static RGB direct_PointLight (PointLight* l, Scene *scene, Intersection isect, B
 
 static RGB direct_AreaLight (AreaLight* l, Scene *scene, Intersection isect, BRDF* f, float& pdf, float *r) {
     RGB color (0., 0., 0.);
+    RGB Kd;
+    
+    if (f->textured) {
+        DiffuseTexture * df = (DiffuseTexture *)f;
+        Kd = df->GetKd(isect.TexCoord);
+    }
+    else {
+        Kd = f->Kd;
+    }
 
-    if (!f->Kd.isZero()) {
+    if (!Kd.isZero()) {
         Point Lpos;
         
         RGB L = l->Sample_L(r, &Lpos, pdf);
@@ -141,7 +159,7 @@ static RGB direct_AreaLight (AreaLight* l, Scene *scene, Intersection isect, BRD
             shadow.adjustOrigin(isect.gn);
             
             if (scene->visibility(shadow, Ldistance-EPSILON)) {
-                color = L * f->Kd * cosL;
+                color = L * Kd * cosL;
             }
         }
     } // Kd is zero

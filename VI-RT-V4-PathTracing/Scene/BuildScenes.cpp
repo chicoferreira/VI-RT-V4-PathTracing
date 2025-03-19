@@ -6,9 +6,11 @@
 //
 
 #include "BuildScenes.hpp"
+#include "DiffuseTexture.hpp"
 
 static int AddDiffuseMat (Scene& scene, RGB const color);
 static int AddMat (Scene& scene, RGB const Ka, RGB const Kd, RGB const Ks, RGB const Kt, float const eta=1.f);
+static int AddTextMat (Scene& scene, std::string filename, RGB const Ka, RGB const Kd, RGB const Ks, RGB const Kt, float const eta=1.f);
 static void AddSphere (Scene& scene, Point const C, float const radius,
                             int const mat_ndx);
 static void AddTriangle (Scene& scene,
@@ -26,6 +28,20 @@ static int AddDiffuseMat (Scene& scene, RGB const color) {
     
     return (scene.AddMaterial(brdf));
 }
+
+static int AddTextMat (Scene& scene, std::string filename, RGB const Ka, RGB const Kd, RGB const Ks, RGB const Kt, float const eta) {
+    DiffuseTexture *brdf = new DiffuseTexture(filename);
+    
+    brdf->Ka = Ka;
+    brdf->Kd = Kd;
+    brdf->Ks = Ks;
+    brdf->Kt = Kt;
+    brdf->eta = eta;
+    brdf->textured = true;
+    
+    return (scene.AddMaterial(brdf));
+}
+
 
 static int AddMat (Scene& scene, RGB const Ka, RGB const Kd, RGB const Ks, RGB const Kt, float const eta) {
     BRDF *brdf = new BRDF;
@@ -58,6 +74,20 @@ static void AddTriangle (Scene& scene,
     prim->material_ndx = mat_ndx;
     scene.AddPrimitive(prim);
 }
+
+static void AddTriangleUV (Scene& scene,
+                         Point const v1, Point const v2, Point const v3,
+                           Vec2 const uv1, Vec2 const uv2, Vec2 const uv3,
+                         int const mat_ndx) {
+    
+    Triangle *tri = new Triangle(v1, v2, v3);
+    tri->set_uv(uv1, uv2, uv3);
+    Primitive *prim = new Primitive;
+    prim->g = tri;
+    prim->material_ndx = mat_ndx;
+    scene.AddPrimitive(prim);
+}
+
 
 // Scene with single triangle
 void SingleTriScene (Scene& scene){
@@ -209,11 +239,13 @@ void CornellBox (Scene& scene) {
 
 // Diffuse Cornell Box
 void DiffuseCornellBox (Scene& scene) {
-    int const white_mat = AddMat(scene, RGB (0.9, 0.9, 0.9), RGB (0.4, 0.4, 0.4), RGB (0., 0., 0.), RGB (0., 0., 0.));
-    int const red_mat = AddMat(scene, RGB (0.9, 0., 0.), RGB (0.4, 0., 0.), RGB (0., 0., 0.), RGB (0., 0., 0.));
-    int const green_mat = AddMat(scene, RGB (0., 0.9, 0.), RGB (0., 0.2, 0.), RGB (0., 0., 0.), RGB (0., 0., 0.));
-    int const blue_mat = AddMat(scene, RGB (0., 0., 0.9), RGB (0., 0., 0.4), RGB (0., 0., 0.), RGB (0., 0., 0.));
-    int const orange_mat = AddMat(scene, RGB (0.99, 0.65, 0.), RGB (0.37, 0.24, 0.), RGB (0., 0., 0.), RGB (0., 0., 0.));
+    int const text_backwall = AddTextMat(scene, "Dog.ppm", RGB (0.3, 0.3, 0.3), RGB (0.6, 0.6, 0.6), RGB (0., 0., 0.), RGB (0., 0., 0.));
+    int const uminho_text = AddTextMat(scene, "UMinho.ppm", RGB (0.3, 0.3, 0.3), RGB (0.6, 0.6, 0.6), RGB (0., 0., 0.), RGB (0., 0., 0.));
+    int const white_mat = AddMat(scene, RGB (0.1, 0.1, 0.1), RGB (0.6, 0.6, 0.6), RGB (0., 0., 0.), RGB (0., 0., 0.));
+    int const red_mat = AddMat(scene, RGB (0.1, 0., 0.), RGB (0.6, 0., 0.), RGB (0., 0., 0.), RGB (0., 0., 0.));
+    int const green_mat = AddMat(scene, RGB (0., 0.1, 0.), RGB (0., 0.6, 0.), RGB (0., 0., 0.), RGB (0., 0., 0.));
+    int const blue_mat = AddMat(scene, RGB (0., 0., 0.1), RGB (0., 0., 0.6), RGB (0., 0., 0.), RGB (0., 0., 0.));
+    int const orange_mat = AddMat(scene, RGB (0.37, 0.24, 0.), RGB (0.66, 0.44, 0.), RGB (0., 0., 0.), RGB (0., 0., 0.));
     // Floor
     AddTriangle(scene, Point(552.8, 0.0, 0.0), Point(0.0, 0.0, 0.0), Point(0.0, 0.0, 559.2), white_mat);
     AddTriangle(scene, Point(549.6, 0.0, 559.2), Point(552.8, 0.0, 0.0), Point(0.0, 0.0, 559.2), white_mat);
@@ -221,7 +253,9 @@ void DiffuseCornellBox (Scene& scene) {
     AddTriangle(scene, Point(556.0, 548.8, 0.0), Point(0.0, 548.8, 0.0), Point(0.0, 548.8, 559.2), white_mat);
     AddTriangle(scene, Point(556.0, 548.8, 559.2), Point(556.0, 548.8, 0.0), Point(0., 548.8, 559.2), white_mat);
     // Back wall
-    AddTriangle(scene, Point(0.0, 0.0, 559.2), Point(549.6, 0.0, 559.2), Point(556.0, 548.8, 559.2), white_mat);
+    //AddTriangleUV (scene, Point(0.0, 0.0, 559.2), Point(549.6, 0.0, 559.2), Point(556.0, 548.8, 559.2), Vec2(1.,1.), Vec2(0.,1.), Vec2(0.,0.), text_backwall);
+    //AddTriangleUV(scene, Point(0.0, 0.0, 559.2), Point(0.0, 548.8, 559.2), Point(556.0, 548.8, 559.2), Vec2(1.,1.), Vec2(1.,0.), Vec2(0.,0.), text_backwall);
+    AddTriangle (scene, Point(0.0, 0.0, 559.2), Point(549.6, 0.0, 559.2), Point(556.0, 548.8, 559.2), white_mat);
     AddTriangle(scene, Point(0.0, 0.0, 559.2), Point(0.0, 548.8, 559.2), Point(556.0, 548.8, 559.2), white_mat);
     // Left Wall
     AddTriangle(scene, Point(0.0, 0.0, 0.), Point(0., 0., 559.2), Point(0., 548.8, 559.2), green_mat);
@@ -232,6 +266,8 @@ void DiffuseCornellBox (Scene& scene) {
 
     // short block
     // top
+    //AddTriangleUV(scene, Point(130.0, 165.0,  65.0), Point( 82.0, 165.0, 225.0), Point(240.0, 165.0, 272.0), Vec2(0.,0.), Vec2(0.,1.), Vec2(1.,1.), uminho_text);
+    //AddTriangleUV(scene, Point(130.0, 165.0,  65.0), Point( 290.0, 165.0, 114.0), Point(240.0, 165.0, 272.0), Vec2(0.,0.), Vec2(1.,0.), Vec2(1.,1.), uminho_text);
     AddTriangle(scene, Point(130.0, 165.0,  65.0), Point( 82.0, 165.0, 225.0), Point(240.0, 165.0, 272.0), orange_mat);
     AddTriangle(scene, Point(130.0, 165.0,  65.0), Point( 290.0, 165.0, 114.0), Point(240.0, 165.0, 272.0), orange_mat);
     // bottom
@@ -287,10 +323,10 @@ void DiffuseCornellBox (Scene& scene) {
     }
 #else
     for (int lll=-1 ; lll<2 ; lll++) {
-        AreaLight *a1 = new AreaLight(RGB(.3,.3,.3), Point(250.+lll*150, 545., 250.+lll*150), Point(300.+lll*150, 545., 250.+lll*150), Point(300.+lll*150, 545., 300.+lll*150), Vector (0.,-1.,0.));
+        AreaLight *a1 = new AreaLight(RGB(.2,.2,.2), Point(250.+lll*150, 545., 250.+lll*150), Point(300.+lll*150, 545., 250.+lll*150), Point(300.+lll*150, 545., 300.+lll*150), Vector (0.,-1.,0.));
             scene.lights.push_back(a1);
             scene.numLights++;
-        AreaLight *a2 = new AreaLight(RGB(.3,.3,.3), Point(250.+lll*150, 545., 250.+lll*150), Point(250.+lll*150, 545., 300.+lll*150), Point(300.+lll*150, 545., 300.+lll*150), Vector (0.,-1.,0.));
+        AreaLight *a2 = new AreaLight(RGB(.2,.2,.2), Point(250.+lll*150, 545., 250.+lll*150), Point(250.+lll*150, 545., 300.+lll*150), Point(300.+lll*150, 545., 300.+lll*150), Vector (0.,-1.,0.));
             scene.lights.push_back(a2);
             scene.numLights++;
     }

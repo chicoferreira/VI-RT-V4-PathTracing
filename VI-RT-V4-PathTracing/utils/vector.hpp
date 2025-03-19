@@ -10,6 +10,13 @@
 
 #include <cmath>
 
+class Vec2 {
+public:
+    float u,v;
+    Vec2 ():u(0.),v(0.) {}
+    Vec2 (float _u, float _v):u(_u),v(_v) {}
+};
+
 class Vector {
 public:
     float X,Y,Z;
