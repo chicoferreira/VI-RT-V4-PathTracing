@@ -84,7 +84,7 @@ int main(int argc, const char * argv[]) {
     //shd = new DistributedShader(&scene, RGB(0.1,0.1,0.8));
     shd = new PathTracing(&scene, RGB(0.,0.,0.2));
     // declare the renderer
-    int const spp=640;
+    int const spp=16;
     
     bool const jitter=true;
     StandardRenderer myRender (cam, &scene, img, shd, spp, jitter);
