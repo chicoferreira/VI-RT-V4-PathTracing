@@ -10,6 +10,8 @@
 
 #include <cmath>
 
+const float EPSILON=1e-3;
+
 class Vec2 {
 public:
     float u,v;

@@ -14,7 +14,7 @@
 #include "AmbientShader.hpp"
 #include "WhittedShader.hpp"
 #include "DistributedShader.hpp"
-#include "IndirectDiffuseShader.hpp"
+#include "PathTracingShader.hpp"
 #include "AmbientLight.hpp"
 #include "Sphere.hpp"
 #include "BuildScenes.hpp"
@@ -43,8 +43,8 @@ int main(int argc, const char * argv[]) {
     // Camera parameters for the simple scenes
     //const Point Eye ={0,0,0}, At={0,0,1};
     /* Cornell Box */
-    //CornellBox(scene);
-    DiffuseCornellBox(scene);
+    CornellBox(scene);
+    //DiffuseCornellBox(scene);
     // Camera parameters for the Cornell Box
     const Point Eye ={280,265,-500}, At={280,260,0};
     const float deFocusRad = 0*3.14f/180.f;    // to radians
@@ -82,9 +82,9 @@ int main(int argc, const char * argv[]) {
     //shd = new AmbientShader(&scene, RGB(0.1,0.1,0.8));
     //shd = new WhittedShader(&scene, RGB(0.1,0.1,0.8));
     //shd = new DistributedShader(&scene, RGB(0.1,0.1,0.8));
-    shd = new IndirectDiffuse(&scene, RGB(0.,0.,0.2));
+    shd = new PathTracing(&scene, RGB(0.,0.,0.2));
     // declare the renderer
-    int const spp=1;
+    int const spp=640;
     
     bool const jitter=true;
     StandardRenderer myRender (cam, &scene, img, shd, spp, jitter);

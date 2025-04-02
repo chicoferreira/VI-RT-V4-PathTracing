@@ -52,6 +52,12 @@ void StandardRenderer::Render () {
                 // shade this intersection (shader) - remember: depth=0
                 color += shd->shade(intersected, isect, 0);
                 
+                /*  DEBUGGING */
+                
+                //if (x==100) color.set (0.,255.,0.);
+                //if (y==250) color.set (0.,255.,0.);
+                
+
             } // multiple samples
             // write the result into the image frame buffer (image)
             img->set(x,y, color*sppf);

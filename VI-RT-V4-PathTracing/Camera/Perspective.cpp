@@ -36,6 +36,7 @@ bool Perspective::GenerateRay(const int x, const int y, Ray *r, const float *cam
     
     r->FaceID = -1;
     r->propagating_eta = 1.f;
+    r->rtype = PRIMARY;
 
     return true;
 }

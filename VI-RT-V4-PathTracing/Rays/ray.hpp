@@ -11,10 +11,17 @@
 #include "vector.hpp"
 #include "RGB.hpp"
 
-const float EPSILON=1e-3;
+typedef enum {
+    PRIMARY,
+    SHADOW,
+    SPEC_REFL,
+    SPEC_TRANS,
+    DIFF_REFL
+} RayType;
 
 class Ray {
 public:
+    RayType rtype;
     Point o; // ray origin
     Vector dir; // ray direction
     int FaceID;  // ID of the face where the origin lays in
@@ -23,16 +30,18 @@ public:
     int pix_x, pix_y;
     float propagating_eta;
     Ray () {}
-    Ray (Point o, Vector d, RGB _throughput): o(o),dir(d), throughput(_throughput) {}
-    Ray (Point o, Vector d): o(o),dir(d) {
-        Ray (o, d, RGB(1.0, 1.0, 1.0));
+    Ray (Point o, Vector d, RayType t, RGB _throughput): o(o),dir(d), rtype(t), throughput(_throughput) {
+        //invertDir();
+    }
+    Ray (Point o, Vector d, RayType t): o(o),dir(d), rtype(t) {
+        Ray (o, d, t, RGB(1.0, 1.0, 1.0));
     }
     ~Ray() {}
 
     void invertDir (void) {
-        invDir.X = 1.f / dir.X;
-        invDir.Y = 1.f / dir.Y;
-        invDir.Z = 1.f / dir.Z;
+        invDir.X = (dir.X!=0.f ? 1.f / dir.X : 1.e5);
+        invDir.Y = (dir.Y!=0.f ? 1.f / dir.Y : 1.e5);
+        invDir.Z = (dir.Z!=0.f ? 1.f / dir.Z : 1.e5);
     }
 
     void adjustOrigin (Vector normal) {

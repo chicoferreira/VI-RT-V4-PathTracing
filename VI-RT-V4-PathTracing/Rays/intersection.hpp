@@ -10,9 +10,11 @@
 
 #include "vector.hpp"
 #include "BRDF.hpp"
+#include "ray.hpp"
 
 typedef struct Intersection {
 public:
+    RayType r_type;
     Point p;
     Vector gn;  // geometric normal
     Vector sn;  // shading normal (the same as gn for the time being)

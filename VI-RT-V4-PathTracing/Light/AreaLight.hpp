@@ -28,7 +28,7 @@ public:
     RGB L (Point p) {return power;}
     RGB L () {return power;}
     // return a point p and RGB radiance for a given probability pair r[2]
-    // thye pdf should be tajen as 1/Area
+    // the pdf should be taken as 1/Area
     RGB Sample_L (float *r, Point *p) {
         // sample point as described in the "Gloabl illumination Compendium", page 12, item 18
         const float sqrt_r0 = sqrtf(r[0]);

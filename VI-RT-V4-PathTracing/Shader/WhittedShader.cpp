@@ -34,14 +34,15 @@ static RGB direct_PointLight (PointLight* l, Scene *scene, Intersection isect, B
         float cosL = Ldir.dot(isect.sn);
         if (cosL>0) {
             
-            Ray shadow = Ray(isect.p, Ldir);
+            Ray shadow = Ray(isect.p, Ldir, SHADOW);
             shadow.pix_x = isect.pix_x;
             shadow.pix_y = isect.pix_y;
             
             shadow.adjustOrigin(isect.gn);
             
             if (scene->visibility(shadow, Ldistance-EPSILON)) {
-                color += L * f->Kd * cosL;
+                color = L * f->Kd * cosL;
+                if (Ldistance>0.f) color/= (Ldistance*Ldistance);
             }
         }
     } // Kd is zero
@@ -69,12 +70,12 @@ static RGB directLighting (Scene *scene, Intersection isect, BRDF *f) {
 
 RGB WhittedShader::specularReflection (Intersection isect, BRDF *f, int depth) {
     RGB color(0.,0.,0.);
-
+    
     // generate the specular ray
     // direction R = 2 (N.V) N - V
     Vector Rdir = reflect(isect.wo, isect.sn);
-    Ray specular(isect.p, Rdir);
-    
+    Ray specular(isect.p, Rdir, SPEC_REFL);
+
     specular.pix_x = isect.pix_x;
     specular.pix_y = isect.pix_y;
     
@@ -87,6 +88,7 @@ RGB WhittedShader::specularReflection (Intersection isect, BRDF *f, int depth) {
     bool intersected;
     Intersection s_isect;
     // trace ray
+    
     intersected = scene->trace(specular, &s_isect);
 
     // shade this intersection
@@ -114,7 +116,7 @@ RGB WhittedShader::specularTransmission (Intersection isect, BRDF *f, int depth)
     
     Vector const dir = (cannot_refract ? reflect(V,N) : refract (V, N, IOR));
 
-    Ray refraction(isect.p, dir);
+    Ray refraction(isect.p, dir, (cannot_refract ? SPEC_REFL : SPEC_TRANS));
     
     refraction.pix_x = isect.pix_x;
     refraction.pix_y = isect.pix_y;
@@ -153,14 +155,20 @@ RGB WhittedShader::shade(bool intersected, Intersection isect, int depth) {
     #define MAX_DEPTH 3
     // if there is a specular component sample it
     if (!f->Ks.isZero() && depth<MAX_DEPTH) {
-        color += specularReflection (isect, f, depth+1);
+        RGB scolor;
+        scolor = specularReflection (isect, f, depth);
+        color += scolor;
     }
     // if there is a specular component sample it
     if (!f->Kt.isZero() && depth<MAX_DEPTH) {
-        color += specularTransmission (isect, f, depth+1);
+        RGB tcolor;
+        tcolor = specularTransmission (isect, f, depth);
+        color += tcolor;
     }
     
-    color += directLighting(scene, isect, f);
+    RGB dcolor;
+    dcolor = directLighting(scene, isect, f);
+    color += dcolor;
 
     return color;
 };

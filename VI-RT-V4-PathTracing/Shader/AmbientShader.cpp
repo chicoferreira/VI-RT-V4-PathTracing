@@ -7,6 +7,7 @@
 
 #include "AmbientShader.hpp"
 #include "BRDF.hpp"
+#include "AmbientLight.hpp"
 
 RGB AmbientShader::shade(bool intersected, Intersection isect, int depth) {
     RGB color(0.,0.,0.);
@@ -28,13 +29,14 @@ RGB AmbientShader::shade(bool intersected, Intersection isect, int depth) {
     BRDF *f = isect.f;
     if (f->Ka.isZero()) return color;
     RGB Ka = f->Ka;
-    
+
     // ambient shade
     // Loop over scene's light sources and process Ambient Lights
-    for (auto light_itr = scene->lights.begin() ; light_itr != scene->lights.end() ; light_itr++) {
+    for (auto l : scene->lights) {
         
-        if ((*light_itr)->type == AMBIENT_LIGHT) {  // is it an ambient light ?
-            color += Ka * (*light_itr)->L();
+        if (l->type == AMBIENT_LIGHT) {  // is it an ambient light ?
+            AmbientLight *al = (AmbientLight *)l;
+            color += Ka * al->L();
             continue;
         }
     }

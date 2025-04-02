@@ -12,9 +12,14 @@
 #include <string>
 #include <cstring>
 
+typedef struct {
+    unsigned char val[3];  // r,g,b
+} char_pixel;
+
 class Image {
 protected:
     RGB *imagePlane;
+    char_pixel *img2save;
 public:
     int W,H;
     Image(): W(0),H(0),imagePlane(NULL) {}
@@ -46,6 +51,7 @@ public:
     }
     virtual bool Save (std::string filename) {return true;}
     virtual bool Load (std::string filename) {return true;}
+    
 };
 
 #endif /* image_hpp */

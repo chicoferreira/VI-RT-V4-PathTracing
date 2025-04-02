@@ -71,7 +71,7 @@ bool Scene::trace (Ray r, Intersection *isect) {
             }
         }
     }
-
+    isect->r_type = r.rtype;
     
     return intersection;
 }

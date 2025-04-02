@@ -11,14 +11,13 @@
 
 #include "Shader_Utils.hpp"
 
-
 RGB DistributedShader::specularReflection (Intersection isect, BRDF *f, int depth) {
     RGB color(0.,0.,0.);
 
     // generate the specular ray
     // direction R = 2 (N.V) N - V
     Vector Rdir = reflect(isect.wo, isect.sn);
-    Ray specular(isect.p, Rdir);
+    Ray specular(isect.p, Rdir, SPEC_REFL);
     
     specular.pix_x = isect.pix_x;
     specular.pix_y = isect.pix_y;
@@ -59,7 +58,7 @@ RGB DistributedShader::specularTransmission (Intersection isect, BRDF *f, int de
     
     Vector const dir = (cannot_refract ? reflect(V,N) : refract (V, N, IOR));
 
-    Ray refraction(isect.p, dir);
+    Ray refraction(isect.p, dir, (cannot_refract ? SPEC_REFL : SPEC_TRANS));
     
     refraction.pix_x = isect.pix_x;
     refraction.pix_y = isect.pix_y;
@@ -82,6 +81,7 @@ RGB DistributedShader::specularTransmission (Intersection isect, BRDF *f, int de
     return color;
 }
 
+
 RGB DistributedShader::shade(bool intersected, Intersection isect, int depth) {
     RGB color(0.,0.,0.);
     
@@ -95,7 +95,7 @@ RGB DistributedShader::shade(bool intersected, Intersection isect, int depth) {
     // get the BRDF
     BRDF *f = isect.f;
     
-    #define MAX_DEPTH 4
+    #define MAX_DEPTH 3
     // if there is a specular component sample it
     if (!f->Ks.isZero() && depth<MAX_DEPTH) {
         color += specularReflection (isect, f, depth+1);
