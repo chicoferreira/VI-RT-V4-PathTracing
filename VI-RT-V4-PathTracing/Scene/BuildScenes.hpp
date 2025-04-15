@@ -22,5 +22,6 @@ void SingleTriScene (Scene& scene);
 void DeFocusTriScene (Scene& scene);
 void CornellBox (Scene& scene);
 void DiffuseCornellBox (Scene& scene);
+void DLightChallenge (Scene& scene);
 
 #endif /* BuildScenes_hpp */

@@ -169,25 +169,54 @@ RGB PathTracing::shade(bool intersected, Intersection isect, int depth) {
     
     // Russian Roullette
     #define MIN_DEPTH 2
-    if (depth<MIN_DEPTH) {
+    #define P_CONTINUE 0.8f
+    float cont=U_dist(rng);
+    if (depth<MIN_DEPTH || cont < P_CONTINUE) {
 
+        float pdf[3], sum, cdf[3];
+        
+        pdf[0] = f->Ks.Y();
+        pdf[1] = f->Kt.Y();
+        pdf[2] = f->Kd.Y();
+        
+        sum = pdf[0] + pdf[1] + pdf[2];
+        pdf[0] /= sum;
+        pdf[1] /= sum;
+        pdf[2] /= sum;
+
+        cdf[0] = pdf[0];
+        cdf[1] = cdf[0] + pdf[1];
+        cdf[2] = cdf[1] + pdf[2];
+        
+        float const rnd = U_dist(rng);
+        
             // if there is a specular component sample it
-        if (!f->Ks.isZero()) {
-            color += specularReflection (isect, f, depth);
+        if (!f->Ks.isZero() && rnd < cdf[0]) {
+            RGB c_aux;
+            c_aux = specularReflection (isect, f, depth);
+            c_aux /= pdf[0];
+            color += c_aux;
         }
             // if there is a specular component sample it
-        if (!f->Kt.isZero()) {
-            color += specularTransmission (isect, f, depth);
+        else if (!f->Kt.isZero() &&  rnd < cdf[1]) {
+            RGB c_aux;
+            c_aux = specularTransmission (isect, f, depth);
+            c_aux /= pdf[1];
+            color += c_aux;
         }
             // if there is a diffuse component sample it
             // do one bounce (do not recurse on indirect diffuse)
-        if (!f->Kd.isZero() && isect.r_type != DIFF_REFL) {
-            color += diffuseReflection (isect, f, depth);
+        else if (!f->Kd.isZero() && isect.r_type != DIFF_REFL) {
+            RGB c_aux;
+            c_aux = diffuseReflection (isect, f, depth);
+            c_aux /= pdf[2];
+            color += c_aux;
         }
+        if (depth>=MIN_DEPTH) color /= P_CONTINUE;
     }
     if (!f->Kd.isZero()) {
-        //color += directLighting(scene, isect, f, rng, U_dist, UNIFORM_ONE);
-        color += directLighting(scene, isect, f, rng, U_dist, ALL_LIGHTS);
+        color += directLighting(scene, isect, f, rng, U_dist, UNIFORM_ONE);
+        //color += directLighting(scene, isect, f, rng, U_dist, ALL_LIGHTS);
     }
     return color;
 };

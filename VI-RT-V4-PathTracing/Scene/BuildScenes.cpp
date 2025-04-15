@@ -232,10 +232,10 @@ void CornellBox (Scene& scene) {
     }
 #else
     for (int lll=-1 ; lll<2 ; lll++) {
-        AreaLight *a1 = new AreaLight(RGB(250000.,250000.,250000.), Point(250.+lll*150, 545., 250.+lll*150), Point(300.+lll*150, 545., 250.+lll*150), Point(300.+lll*150, 545., 300.+lll*150), Vector (0.,-1.,0.));
+        AreaLight *a1 = new AreaLight(RGB(250000.,250000.,250000.), Point(250.+lll*150, 548.75, 250.+lll*150), Point(300.+lll*150, 548.75, 250.+lll*150), Point(300.+lll*150, 548.75, 300.+lll*150), Vector (0.,-1.,0.));
             scene.lights.push_back(a1);
             scene.numLights++;
-        AreaLight *a2 = new AreaLight(RGB(250000.,250000.,250000.), Point(250.+lll*150, 545., 250.+lll*150), Point(250.+lll*150, 545., 300.+lll*150), Point(300.+lll*150, 545., 300.+lll*150), Vector (0.,-1.,0.));
+        AreaLight *a2 = new AreaLight(RGB(250000.,250000.,250000.), Point(250.+lll*150, 548.75, 250.+lll*150), Point(250.+lll*150, 548.75, 300.+lll*150), Point(300.+lll*150, 548.75, 300.+lll*150), Vector (0.,-1.,0.));
             scene.lights.push_back(a2);
             scene.numLights++;
     }
@@ -322,21 +322,148 @@ void DiffuseCornellBox (Scene& scene) {
 #ifndef AREA
     for (int x=-1 ; x<2 ; x++) {
         for (int z=-1 ; z<2 ; z++) {
-            PointLight *p = new PointLight(RGB(0.16,0.16,0.16),Point(278.+x*150.,545.,280.+z*150));
+            PointLight *p = new PointLight(RGB(0.16,0.16,0.16),Point(278.+x*150.,548.75,280.+z*150));
             scene.lights.push_back(p);
             scene.numLights++;
         }
     }
 #else
     for (int lll=-1 ; lll<2 ; lll++) {
-        AreaLight *a1 = new AreaLight(RGB(.2,.2,.2), Point(250.+lll*150, 545., 250.+lll*150), Point(300.+lll*150, 545., 250.+lll*150), Point(300.+lll*150, 545., 300.+lll*150), Vector (0.,-1.,0.));
+        AreaLight *a1 = new AreaLight(RGB(25000,25000,25000), Point(250.+lll*150, 548., 250.+lll*150), Point(300.+lll*150, 548., 250.+lll*150), Point(300.+lll*150, 548., 300.+lll*150), Vector (0.,-1.,0.));
             scene.lights.push_back(a1);
             scene.numLights++;
-        AreaLight *a2 = new AreaLight(RGB(.2,.2,.2), Point(250.+lll*150, 545., 250.+lll*150), Point(250.+lll*150, 545., 300.+lll*150), Point(300.+lll*150, 545., 300.+lll*150), Vector (0.,-1.,0.));
+        AreaLight *a2 = new AreaLight(RGB(25000,25000,25000), Point(250.+lll*150, 548., 250.+lll*150), Point(250.+lll*150, 548., 300.+lll*150), Point(300.+lll*150, 548., 300.+lll*150), Vector (0.,-1.,0.));
             scene.lights.push_back(a2);
             scene.numLights++;
     }
 #endif
+    return ;
+}
+
+// DLight Challenge
+void DLightChallenge (Scene& scene) {
+    int const text_backwall = AddTextMat(scene, "Dog.ppm", RGB (0.3, 0.3, 0.3), RGB (0.8, 0.8, 0.8), RGB (0., 0., 0.), RGB (0., 0., 0.));
+    int const uminho_text = AddTextMat(scene, "UMinho.ppm", RGB (0.3, 0.3, 0.3), RGB (0.6, 0.6, 0.6), RGB (0., 0., 0.), RGB (0., 0., 0.));
+    int const white_mat = AddMat(scene, RGB (0.1, 0.1, 0.1), RGB (0.6, 0.6, 0.6), RGB (0., 0., 0.), RGB (0., 0., 0.));
+    int const red_mat = AddMat(scene, RGB (0.1, 0., 0.), RGB (0.5, 0.1, 0.1), RGB (0., 0., 0.), RGB (0., 0., 0.));
+    int const green_mat = AddMat(scene, RGB (0., 0.1, 0.), RGB (0., 0.6, 0.), RGB (0., 0., 0.), RGB (0., 0., 0.));
+    int const blue_mat = AddMat(scene, RGB (0., 0., 0.1), RGB (0., 0., 0.6), RGB (0., 0., 0.), RGB (0., 0., 0.));
+    int const orange_mat = AddMat(scene, RGB (0.37, 0.24, 0.), RGB (0.66, 0.44, 0.), RGB (0., 0., 0.), RGB (0., 0., 0.));
+    // Floor
+    AddTriangle(scene, Point(552.8, 0.0, 0.0), Point(-100.0, 0.0, 0.0), Point(-100.0, 0.0, 859.2), white_mat);
+    AddTriangle(scene, Point(549.6, 0.0, 859.2), Point(552.8, 0.0, 0.0), Point(-100.0, 0.0, 859.2), white_mat);
+    // Ceiling
+    AddTriangle(scene, Point(556.0, 548.8, 0.0), Point(-100.0, 548.8, 0.0), Point(-100.0, 548.8, 859.2), white_mat);
+    AddTriangle(scene, Point(556.0, 548.8, 859.2), Point(556.0, 548.8, 0.0), Point(-100., 548.8, 859.2), white_mat);
+    // Back wall
+    AddTriangleUV (scene, Point(-100.0, 0.0, 859.2), Point(549.6, 0.0, 859.2), Point(556.0, 548.8, 859.2), Vec2(1.,1.), Vec2(0.,1.), Vec2(0.,0.), text_backwall);
+    AddTriangleUV(scene, Point(-100.0, 0.0, 859.2), Point(-100.0, 548.8, 859.2), Point(556.0, 548.8, 859.2), Vec2(1.,1.), Vec2(1.,0.), Vec2(0.,0.), text_backwall);
+    // Left Wall
+    AddTriangle(scene, Point(0.0, 0.0, 0.), Point(0., 0., 459.2), Point(0., 548.8, 459.2), green_mat);
+    AddTriangle(scene, Point(0.0, 0.0, 0.), Point(0., 548.8, 0.), Point(0., 548.8, 459.2), green_mat);
+    // L walls
+    AddTriangle(scene, Point(-100.0, 0.0, 459.2), Point(-100., 0., 859.2), Point(-100., 548.8, 859.2), white_mat);
+    AddTriangle(scene, Point(-100.0, 0.0, 459.2), Point(-100., 548.8, 459.2), Point(-100., 548.8, 859.2), white_mat);
+    AddTriangle (scene, Point(-100.0, 0.0, 459.2), Point(0., 0.0, 459.2), Point(0., 548.8, 459.2),  white_mat);
+    AddTriangle(scene, Point(-100.0, 0.0, 459.2), Point(-100.0, 548.8, 459.2), Point(0., 548.8, 459.2), white_mat);
+    // Right Wall
+    
+    AddTriangle(scene, Point(552.8, 0.0, 0.0), Point(549.6, 0., 859.2), Point(549.6, 548.8, 859.2), red_mat);
+    AddTriangle(scene, Point(552.8, 0.0, 0.0), Point(552.8, 548.8, 0.0), Point(549.6, 548.8, 859.2), red_mat);
+
+    // short block
+    // top
+    AddTriangleUV(scene, Point(130.0, 165.0,  65.0), Point( 82.0, 165.0, 225.0), Point(240.0, 165.0, 272.0), Vec2(0.,0.), Vec2(0.,1.), Vec2(1.,1.), uminho_text);
+    AddTriangleUV(scene, Point(130.0, 165.0,  65.0), Point( 290.0, 165.0, 114.0), Point(240.0, 165.0, 272.0), Vec2(0.,0.), Vec2(1.,0.), Vec2(1.,1.), uminho_text);
+    //AddTriangle(scene, Point(130.0, 165.0,  65.0), Point( 82.0, 165.0, 225.0), Point(240.0, 165.0, 272.0), orange_mat);
+    //AddTriangle(scene, Point(130.0, 165.0,  65.0), Point( 290.0, 165.0, 114.0), Point(240.0, 165.0, 272.0), orange_mat);
+    // bottom
+    AddTriangle(scene, Point(130.0, 0.01,  65.0), Point( 82.0, 0.01, 225.0), Point(240.0, 0.01, 272.0), orange_mat);
+    AddTriangle(scene, Point(130.0, 0.01,  65.0), Point( 290.0, 0.01, 114.0), Point(240.0, 0.01, 272.0), orange_mat);
+    // left
+    AddTriangle(scene, Point(290.0,   0.0, 114.0), Point(  290.0, 165.0, 114.0), Point(240.0, 165.0, 272.0), orange_mat);
+    AddTriangle(scene, Point(290.0,   0.0, 114.0), Point( 240.0,  0.0, 272.0), Point(240.0, 165.0, 272.0), orange_mat);
+    // back
+    AddTriangle(scene, Point(240.0, 0.0, 272.0), Point(240.0, 165.0, 272.0), Point(82.0, 165., 225.0), orange_mat);
+    AddTriangle(scene, Point(240.0, 0.0, 272.0), Point(82.0, 0.0, 225.0), Point(82.0, 165.0, 225.0), orange_mat);
+    // right
+    AddTriangle(scene, Point(82.0, 0.0, 225.0), Point(82.0, 165.0, 225.0), Point(130.0, 165.0, 65.0), orange_mat);
+    AddTriangle(scene, Point(82.0, 0.0, 225.0), Point(130.0, 0.0, 65.0), Point(130.0, 165.0, 65.0), orange_mat);
+    // front
+    AddTriangle(scene, Point( 130.0,   0.0,  65.0), Point(130.0, 165.0, 65.0), Point(290.0, 165.0, 114.0), orange_mat);
+    AddTriangle(scene, Point( 130.0,   0.0,  65.0), Point(290.0, 0.0, 114.0), Point(290.0, 165.0, 114.0), orange_mat);
+
+    // tall block
+    // top
+    AddTriangle(scene, Point(423.0, 330.0, 247.0), Point(265.0, 330.0, 296.0), Point(314.0, 330.0, 456.0), blue_mat);
+    AddTriangle(scene, Point(423.0, 330.0, 247.0), Point(472.0, 330.0, 406.0), Point(314.0, 330.0, 456.0), blue_mat);
+    // bottom
+    AddTriangle(scene, Point(423.0, 0.1, 247.0), Point(265.0, 0.1, 296.0), Point(314.0, 0.1, 456.0), blue_mat);
+    AddTriangle(scene, Point(423.0, 0.1, 247.0), Point(472.0, 0.1, 406.0), Point(314.0, 0.1, 456.0), blue_mat);
+    // left
+    AddTriangle(scene, Point(423.0, 0.0, 247.0), Point(423.0, 330.0, 247.0), Point(472.0, 330.0, 406.0), blue_mat);
+    AddTriangle(scene, Point(423.0, 0.0, 247.0), Point(472.0, 0.0, 406.0), Point(472.0, 330.0, 406.0), blue_mat);
+    // back
+    AddTriangle(scene, Point(472.0, 0.0, 406.0), Point(472.0, 330.0, 406.0), Point(314.0, 330.0, 456.0), blue_mat);
+    AddTriangle(scene, Point(472.0, 0.0, 406.0), Point(314.0, 0.0, 406.0), Point(314.0, 330.0, 456.0), blue_mat);
+    // right
+    AddTriangle(scene, Point(314.0, 0.0, 456.0), Point(314.0, 330.0, 456.0), Point(265.0, 330.0, 296.0), blue_mat);
+    AddTriangle(scene, Point(314.0, 0.0, 456.0), Point(265.0, 0.0, 296.0), Point(265.0, 330.0, 296.0), blue_mat);
+    // front
+    AddTriangle(scene, Point(265.0, 0.0, 296.0), Point(265.0, 330.0, 296.0), Point(423.0, 330.0, 247.0), blue_mat);
+    AddTriangle(scene, Point(265.0, 0.0, 296.0), Point(423.0, 0.0, 247.0), Point(423.0, 330.0, 247.0), blue_mat);
+    
+  
+    for (int llz=-1 ; llz<2 ; llz++) {
+        for (int llx=-1 ; llx<2 ; llx++) {
+            AreaLight *a1 = new AreaLight(RGB(5000.-(llx+llz)*2000.,5000. -(llx+llz)*2000.,5000.-(llx+llz)*2000.), Point(250.+llx*150, 545., 250.+llz*150), Point(300.+llx*150, 545., 250.+llz*150), Point(300.+llx*150, 545., 300.+llz*150), Vector (0.,-1.,0.));
+            scene.lights.push_back(a1);
+            scene.numLights++;
+            AreaLight *a2 = new AreaLight(RGB(5000.-(llx+llz)*2000.,5000.-(llx+llz)*2000.,5000.-(llx+llz)*2000.), Point(250.+llx*150, 545., 250.+llz*150), Point(250.+llx*150, 545., 300.+llz*150), Point(300.+llx*150, 545., 300.+llz*150), Vector (0.,-1.,0.));
+            scene.lights.push_back(a2);
+            scene.numLights++;
+        }
+    }
+    for (int lll=0 ; lll<2 ; lll++) {
+        AreaLight *a1 = new AreaLight(RGB(15000.+lll*4000,15000.+lll*4000,15000.+lll*4000), Point(-10., 20.+250*lll, 459.3), Point(-10., 90.+250*lll, 459.3), Point(-90, 90.+250*lll, 459.3), Vector (0.,0.,1.));
+            scene.lights.push_back(a1);
+            scene.numLights++;
+        AreaLight *a2 = new AreaLight(RGB(15000.+lll*4000,15000.+lll*4000,15000.+lll*4000), Point(-10., 20.+250*lll, 459.3), Point(-90., 20.+250*lll, 459.3), Point(-90, 90.+250*lll, 459.3), Vector (0.,0.,1.));
+            scene.lights.push_back(a2);
+            scene.numLights++;
+    }
+    for (int lll=0 ; lll<2 ; lll++) {
+        AreaLight *a1 = new AreaLight(RGB(2000.-lll*500,2000.-lll*500.,1000. -lll*500), Point(0.01, 20., 20.+lll*200.), Point(0.01, 20., 100.+lll*200.), Point(0.01, 30., 100.+lll*200.), Vector (1.,0.,0.));
+            scene.lights.push_back(a1);
+            scene.numLights++;
+        AreaLight *a2 = new AreaLight(RGB(2000.-lll*500,2000.-lll*500,1000. -lll*500), Point(0.01, 20., 20.+lll*200.), Point(0.01, 30., 20.+lll*200.), Point(0.01, 30., 100.+lll*200.), Vector (1.,0.,0.));
+            scene.lights.push_back(a2);
+            scene.numLights++;
+    }
+    for (int lll=0 ; lll<4 ; lll++) {
+        AreaLight *a1 = new AreaLight(RGB(2000.-lll*450,2000.-lll*450.,1000. -lll*300), Point(549.59, 20., 20.+lll*200.), Point(549.59, 20., 100.+lll*200.), Point(549.59, 30., 100.+lll*200.), Vector (-1.,0.,0.));
+            scene.lights.push_back(a1);
+            scene.numLights++;
+        AreaLight *a2 = new AreaLight(RGB(2000.-lll*450,2000.-lll*450,1000. -lll*300), Point(549.59, 20., 20.+lll*200.), Point(549.59, 30., 20.+lll*200.), Point(549.59, 30., 100.+lll*200.), Vector (-1.,0.,0.));
+            scene.lights.push_back(a2);
+            scene.numLights++;
+    }
+    { // blue block light
+        AreaLight *a1 = new AreaLight(RGB(4000.,4000.0,10000.), Point(340.0, 0.01, 220.0), Point(340.0, 0.01, 230.0), Point(350.0, 0.01, 230.0), Vector (0.,1.,0.));
+            scene.lights.push_back(a1);
+            scene.numLights++;
+        AreaLight *a2 = new AreaLight(RGB(4000.,4000.0,10000.), Point(340.0, 0.01, 220.0), Point(350.0, 0.01, 220.0), Point(350.0, 0.01, 230.0), Vector (0.,1.,0.));
+            scene.lights.push_back(a2);
+            scene.numLights++;
+    }
+    { // orange block light
+        AreaLight *a1 = new AreaLight(RGB(4000.,4000.0,10000.), Point(210.0, 0.01, 60.0), Point(210., 0.01, 70.0), Point(220., 0.01, 70.0), Vector (0.,1.,0.));
+            scene.lights.push_back(a1);
+            scene.numLights++;
+        AreaLight *a2 = new AreaLight(RGB(4000.,4000.0,10000.), Point(210., 0.01, 60.0), Point(220., 0.01, 60.0), Point(220., 0.01, 70.0), Vector (0.,1.,0.));
+            scene.lights.push_back(a2);
+            scene.numLights++;
+    }
     return ;
 }
 
