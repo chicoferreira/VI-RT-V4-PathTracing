@@ -21,8 +21,7 @@ SRC      :=                      \
    $(wildcard $(TARGET)/Shader/*.cpp)         \
 
 OBJECTS  := $(SRC:%.cpp=$(OBJ_DIR)/%.o)
-DEPENDENCIES \
-         := $(OBJECTS:.o=.d)
+DEPENDENCIES := $(OBJECTS:.o=.d)
 
 all:	build $(APP_DIR)/$(TARGET)
 

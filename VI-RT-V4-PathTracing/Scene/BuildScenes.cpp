@@ -232,10 +232,10 @@ void CornellBox (Scene& scene) {
     }
 #else
     for (int lll=-1 ; lll<2 ; lll++) {
-        AreaLight *a1 = new AreaLight(RGB(250000.,250000.,250000.), Point(250.+lll*150, 548.75, 250.+lll*150), Point(300.+lll*150, 548.75, 250.+lll*150), Point(300.+lll*150, 548.75, 300.+lll*150), Vector (0.,-1.,0.));
+        AreaLight *a1 = new AreaLight(RGB(250000.,250000.,250000.), Point(250.+lll*150, 545., 250.+lll*150), Point(300.+lll*150, 545., 250.+lll*150), Point(300.+lll*150, 545., 300.+lll*150), Vector (0.,-1.,0.));
             scene.lights.push_back(a1);
             scene.numLights++;
-        AreaLight *a2 = new AreaLight(RGB(250000.,250000.,250000.), Point(250.+lll*150, 548.75, 250.+lll*150), Point(250.+lll*150, 548.75, 300.+lll*150), Point(300.+lll*150, 548.75, 300.+lll*150), Vector (0.,-1.,0.));
+        AreaLight *a2 = new AreaLight(RGB(250000.,250000.,250000.), Point(250.+lll*150, 545., 250.+lll*150), Point(250.+lll*150, 545., 300.+lll*150), Point(300.+lll*150, 545., 300.+lll*150), Vector (0.,-1.,0.));
             scene.lights.push_back(a2);
             scene.numLights++;
     }
@@ -311,8 +311,8 @@ void DiffuseCornellBox (Scene& scene) {
     // front
     AddTriangle(scene, Point(265.0, 0.0, 296.0), Point(265.0, 330.0, 296.0), Point(423.0, 330.0, 247.0), blue_mat);
     AddTriangle(scene, Point(265.0, 0.0, 296.0), Point(423.0, 0.0, 247.0), Point(423.0, 330.0, 247.0), blue_mat);
-    
-  
+
+
     // add an ambient light to the scene
     //AmbientLight *ambient = new AmbientLight(RGB(0.15,0.15,0.15));
     //AmbientLight *ambient = new AmbientLight(RGB(0.07,0.07,0.07));
@@ -322,17 +322,17 @@ void DiffuseCornellBox (Scene& scene) {
 #ifndef AREA
     for (int x=-1 ; x<2 ; x++) {
         for (int z=-1 ; z<2 ; z++) {
-            PointLight *p = new PointLight(RGB(0.16,0.16,0.16),Point(278.+x*150.,548.75,280.+z*150));
+            PointLight *p = new PointLight(RGB(0.16,0.16,0.16),Point(278.+x*150.,545.,280.+z*150));
             scene.lights.push_back(p);
             scene.numLights++;
         }
     }
 #else
     for (int lll=-1 ; lll<2 ; lll++) {
-        AreaLight *a1 = new AreaLight(RGB(25000,25000,25000), Point(250.+lll*150, 548., 250.+lll*150), Point(300.+lll*150, 548., 250.+lll*150), Point(300.+lll*150, 548., 300.+lll*150), Vector (0.,-1.,0.));
+        AreaLight *a1 = new AreaLight(RGB(.2,.2,.2), Point(250.+lll*150, 545., 250.+lll*150), Point(300.+lll*150, 545., 250.+lll*150), Point(300.+lll*150, 545., 300.+lll*150), Vector (0.,-1.,0.));
             scene.lights.push_back(a1);
             scene.numLights++;
-        AreaLight *a2 = new AreaLight(RGB(25000,25000,25000), Point(250.+lll*150, 548., 250.+lll*150), Point(250.+lll*150, 548., 300.+lll*150), Point(300.+lll*150, 548., 300.+lll*150), Vector (0.,-1.,0.));
+        AreaLight *a2 = new AreaLight(RGB(.2,.2,.2), Point(250.+lll*150, 545., 250.+lll*150), Point(250.+lll*150, 545., 300.+lll*150), Point(300.+lll*150, 545., 300.+lll*150), Vector (0.,-1.,0.));
             scene.lights.push_back(a2);
             scene.numLights++;
     }

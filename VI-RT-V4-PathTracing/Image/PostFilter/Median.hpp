@@ -8,6 +8,8 @@
 #ifndef Median_hpp
 #define Median_hpp
 
+#include <vector>
+#include <algorithm>
 #include "vector.hpp"
 
 class Median  {

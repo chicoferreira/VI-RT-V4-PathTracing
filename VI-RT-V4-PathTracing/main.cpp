@@ -8,12 +8,10 @@
 #include <iostream>
 #include "scene.hpp"
 #include "Perspective.hpp"
-#include "DummyRenderer.hpp"
 #include "StandardRenderer.hpp"
 #include "ImagePPM.hpp"
 #include "AmbientShader.hpp"
 #include "WhittedShader.hpp"
-#include "DistributedShader.hpp"
 #include "PathTracingShader.hpp"
 #include "AmbientLight.hpp"
 #include "Sphere.hpp"
@@ -43,7 +41,7 @@ int main(int argc, const char * argv[]) {
     // Camera parameters for the simple scenes
     //const Point Eye ={0,0,0}, At={0,0,1};
     /* Cornell Box */
-    CornellBox(scene);
+    DLightChallenge(scene);
     //DiffuseCornellBox(scene);
     // Camera parameters for the Cornell Box
     const Point Eye ={280,265,-500}, At={280,260,0};
