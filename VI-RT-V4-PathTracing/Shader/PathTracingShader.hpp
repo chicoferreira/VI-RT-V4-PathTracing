@@ -25,9 +25,11 @@ class PathTracing: public Shader {
     std::mt19937 rng{rdev()};
     std::uniform_real_distribution<float>U_dist{0.0,1.0};  // uniform distribution in[0,1[
 
-
+    DIRECT_SAMPLE_MODE light_sampler;
 public:
-    PathTracing (Scene *scene, RGB bg): background(bg), Shader(scene) {}
+    PathTracing(Scene *scene, RGB bg, DIRECT_SAMPLE_MODE light_sampler): background(bg), Shader(scene),
+                                                                         light_sampler(light_sampler) {
+    }
     RGB shade (bool intersected, Intersection isect, int depth);
 };
 

@@ -215,8 +215,7 @@ RGB PathTracing::shade(bool intersected, Intersection isect, int depth) {
         if (depth>=MIN_DEPTH) color /= P_CONTINUE;
     }
     if (!f->Kd.isZero()) {
-        color += directLighting(scene, isect, f, rng, U_dist, UNIFORM_ONE);
-        //color += directLighting(scene, isect, f, rng, U_dist, ALL_LIGHTS);
+        color += directLighting(scene, isect, f, rng, U_dist, light_sampler);
     }
     return color;
 };
