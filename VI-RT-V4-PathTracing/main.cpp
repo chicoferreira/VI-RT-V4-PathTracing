@@ -48,6 +48,14 @@ int main(int argc, const char *argv[]) {
         light_sampler_mode = UNIFORM_ONE;
     } else if (strcmp(light_sampler_mode_name, "all_lights") == 0) {
         light_sampler_mode = ALL_LIGHTS;
+    } else if (strcmp(light_sampler_mode_name, "importance") == 0) {
+        light_sampler_mode = IMPORTANCE_ONE;
+    } else if (strcmp(light_sampler_mode_name, "importance_no_distance") == 0) {
+        light_sampler_mode = IMPORTANCE_ONE_NO_DISTANCE;
+    } else if (strcmp(light_sampler_mode_name, "distance") == 0) {
+        light_sampler_mode = DISTANCE_ONE;
+    } else if (strcmp(light_sampler_mode_name, "distance_squared") == 0) {
+        light_sampler_mode = DISTANCE_SQUARED_ONE;
     } else {
         fprintf(stderr, "Unknown light sampler mode: %s\n", light_sampler_mode_name);
         return 1;
