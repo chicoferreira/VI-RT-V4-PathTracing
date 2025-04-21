@@ -143,23 +143,23 @@ static RGB sampleLightDiscrete(Scene *scene, WeightFunc weight_func, Intersectio
     RGB color(0., 0., 0.);
 
     // Compute the contribution of each light source
-    float *contributions = new float[scene->numLights];
+    std::vector<float> contributions;
     float total_contribution = 0.f;
     for (int i = 0; i < scene->numLights; ++i) {
-        contributions[i] = weight_func(scene, isect, scene->lights[i], f, rng, U_dist);
-        total_contribution += contributions[i];
+        auto weight = weight_func(scene, isect, scene->lights[i], f, rng, U_dist);
+        contributions.push_back(weight);
+        total_contribution += weight;
     }
 
     if (total_contribution <= 0.f) {
-        delete[] contributions;
         return color;  // No contribution from any light source
     }
 
     // Build the CDF
-    float *cdf = new float[scene->numLights];
+    std::vector<float> cdf;
     for (int i = 0; i < scene->numLights; ++i) {
         float last_cdf = (i == 0) ? 0.f : cdf[i - 1];
-        cdf[i] = last_cdf + contributions[i] / total_contribution;
+        cdf.push_back(last_cdf + contributions[i] / total_contribution);
     }
 
     cdf[scene->numLights - 1] = 1.f;  // Ensure the last CDF value is 1 (to avoid rounding errors)
@@ -177,9 +177,6 @@ static RGB sampleLightDiscrete(Scene *scene, WeightFunc weight_func, Intersectio
     Light *l = scene->lights[chosen];
     float contribution = contributions[chosen] / total_contribution;
     color = sample_light(scene, l, isect, f, rng, U_dist) / contribution;
-
-    delete[] contributions;
-    delete[] cdf;
 
     return color;
 }
