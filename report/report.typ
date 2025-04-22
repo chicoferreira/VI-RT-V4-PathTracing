@@ -220,20 +220,6 @@
   generate_aggregated_table(paths, spp)
 }
 
-
-#let spp = 1
-
-#let paths = (
-  (name: "uniform", title: "Uniform"),
-  (name: "distance", title: "Distance"),
-  (name: "distance_squared", title: "Distance Squared"),
-  (name: "importance_no_distance", title: "Importance No Distance"),
-  (name: "importance", title: "Importance"),
-  (name: "all_lights", title: "All Lights"),
-).map(entry => (
-  entry + (image_path: "./outputs/output" + str(spp) + "_" + entry.name + ".png") + generate_path(entry.name, spp)
-))
-
 #pagebreak()
 
 = Metodologia
