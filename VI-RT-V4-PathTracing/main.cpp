@@ -39,8 +39,7 @@ int main(int argc, const char *argv[]) {
     }
 
     auto output_file = const_cast<char *>(argv[1]);
-    int spp = 1;
-    strtol(argv[2], nullptr, 10);
+    int spp = strtol(argv[2], nullptr, 10);
 
     DIRECT_SAMPLE_MODE light_sampler_mode;
     const auto light_sampler_mode_name = const_cast<char *>(argv[3]);

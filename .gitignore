@@ -4,3 +4,5 @@ MyImage.ppm
 .vscode
 *.ppm
 *.png
+
+report/outputs
